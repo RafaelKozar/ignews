@@ -1,5 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
+// este documento é executada apenas uma vez no início da aplicação
 export default class MyDocument extends Document {
     render() {
         return (
@@ -7,7 +8,7 @@ export default class MyDocument extends Document {
                 <Head>
                     <link rel="preconnect" href="https://fonts.gstatic.com" />
                     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet" />
-                    <title>IgNews</title>
+                    
                 </Head>
                 <body>
                     {/* antigo div=root */}
