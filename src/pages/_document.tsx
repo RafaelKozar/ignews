@@ -1,6 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
 // este documento é executada apenas uma vez no início da aplicação
+// este arquivo não pode ter css importado
 export default class MyDocument extends Document {
     render() {
         return (
