@@ -51,8 +51,12 @@
 
                 background : var(--yellow-500);
             }
-        } 
-
-        
+        }         
     }
+
+    // esse botão tem que ir todo para direita por que o header precisa
+    // por isso foi colocado isso dentro do css header ao invés do botão
+    button {
+        margin-left: auto;
+    }   
 }
