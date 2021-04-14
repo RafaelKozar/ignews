@@ -26,7 +26,7 @@ export function SignInButton() {
         >
             <FaGithub color="#eba417" />
             Sign in with GitHub
-            <FiX /> 
+            
         </button>
     );
 }
