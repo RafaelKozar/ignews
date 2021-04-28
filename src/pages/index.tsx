@@ -41,7 +41,7 @@ export const getStaticProps : GetStaticProps = async () => {
   const price = await stripe.prices.retrieve('price_1IfsFsGar3In4DYS1PZOYfed', {
     expand : ['product']
   })  
-
+  
   const product = {
     priceId : price.id,
     amount : new Intl.NumberFormat('en-US', {

@@ -3,6 +3,7 @@ import { Readable } from 'stream';
 
 import Stripe from "stripe";
 import { stripe } from "../../services/stripe";
+import { saveSubscription } from "./_lib/manageSubscription";
 
 async function buffer(readable: Readable) {
     const chunks = []
@@ -23,26 +24,40 @@ export const config = {
 }
 
 const relevantEvents = new Set([
-    'checkout.session.completed'
+    'checkout.session.completed'    
 ])
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
+        
         const buf = await buffer(req);
         const secret = req.headers['stripe-signature'];
 
-        let event : Stripe.Event;
+        let event: Stripe.Event;
         try {
             event = stripe.webhooks.constructEvent(buf, secret, process.env.STRIPE_WEBHOOK_SECREET);
         }
-        catch(err) {
+        catch (err) {
             return res.status(400).send(`Not found webhook ${err.message}`);
         }
+        
+        const { type } = event;
+        if (relevantEvents.has(type)) {
+            try {                
+                switch (type) {
+                    case 'checkout.session.completed':
+                        
+                        const checkoutSession = event.data.object as Stripe.Checkout.Session;
 
-        const {type} = event;
-        if(relevantEvents.has(type))
-        {
-            console.log('Evento received', event)
+                        await saveSubscription(checkoutSession.subscription.toString(), checkoutSession.customer.toString())
+                        break;
+                    default:
+                        throw new Error('Unhandled event')
+
+                }
+            } catch (err) {                
+                return res.json({error : 'WeebHook hanlder failed'})
+            }
         }
 
         res.json({ received: true });

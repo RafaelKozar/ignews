@@ -14,9 +14,9 @@ type User = {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+    
     if(req.method == 'POST')
-    {
-        // debugger;
+    {        
         const session = await getSession({req});
 
         const user = await fauna.query<User>(
@@ -32,7 +32,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         if(!custemerId)
         {
-            debugger;
+            
             const stripeCustemer  = await stripe.customers.create({
                 email: session.user.email,
                 // metadata
