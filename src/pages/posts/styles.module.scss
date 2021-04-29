@@ -1,15 +1,15 @@
 .container {
     max-width: 1120px;
-    max-width: 0 auto;
+    margin: 0 auto;
     padding: 0 2rem;
 }
 
 .posts{
     max-width: 720px;
     margin: 5rem auto 0 ;
-    align-items: center;
+    
 
-    a{
+    a {
         display: block;
 
         & + a{
@@ -32,6 +32,9 @@
         margin-top: 1rem;
         line-height: 2rem;
         transition: color 0.2s;
+        &:hover {
+            color: var(--yellow-500);
+        }
     }
 
     p{
@@ -39,8 +42,8 @@
         margin-top: 0.5rem;
         line-height: 1.625rem;
     }
-
-    &:hover strong{
-        color: var(--yellow-500);
-    }
+    
+    // &:hover strong {
+    //     color: var(--yellow-500);
+    // }
 }
