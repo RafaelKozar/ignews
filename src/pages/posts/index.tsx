@@ -4,12 +4,14 @@ import Primisc from '@prismicio/client';
 import { getPrimiscClient } from '../../services/prismic';
 import styles from './styles.module.scss';
 import { RichText } from 'prismic-dom'
+import Link from 'next/link';
 
 type Post = {
     slug: string;
     title: string;
     excerpt: string;
     updatedAt: string;
+    id : string;
 }
 interface PostProps {
     posts: Post[];
@@ -25,12 +27,16 @@ export default function Posts({ posts }: PostProps) {
             <main className={styles.container}>
                 <div className={styles.posts}>
                     {posts.map(post => (
-                        <a href="#" key={post.slug}>
-                            <time>{post.updatedAt}</time>
-                            <strong>{post.title}</strong>
-                            <p>{post.excerpt}</p>
-                        </a>
-                    ))}                    
+                        // <div key={post.id}>
+                        <Link href={`/posts/${post.slug}`} key={post.id} >
+                            <a key={post.id}>
+                                <time >{post.updatedAt}</time>
+                                <strong>{post.title}</strong>
+                                <p>{post.excerpt}</p>
+                            </a>
+                        </Link>
+                        // </div>
+                    ))}
                 </div>
             </main>
         </>
@@ -51,6 +57,7 @@ export const getStaticProps: GetStaticProps = async () => {
     const posts = response.results.map(p => {
         return {
             slug: p.uid,
+            id : p.id,
             title: RichText.asText(p.data.title),
             excerpt: p.data.content.find(x => x.type === 'paragraph')?.text ?? '',
             updatedAt: new Date(p.last_publication_date).toLocaleDateString('pt-BR', {
