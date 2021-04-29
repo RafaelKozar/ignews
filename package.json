@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "debug-pause": "node --inspect-brk ./node_modules/next/dist/bin/next",    
+    "debug-pause": "node --inspect-brk ./node_modules/next/dist/bin/next",
     "debug": "node --inspect ./node_modules/next/dist/bin/next",
     "build": "next build",
     "start": "next start"
   },
   "dependencies": {
+    "@prismicio/client": "^4.0.0",
     "@stripe/stripe-js": "^1.13.2",
     "axios": "^0.21.1",
     "cross-env": "^7.0.3",

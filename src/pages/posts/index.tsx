@@ -1,11 +1,14 @@
+import { GetStaticProps } from 'next';
 import Head from 'next/head';
+import Primisc from '@prismicio/client';
+import { getPrimiscClient } from '../../services/prismic';
 import styles from './styles.module.scss';
 
 export default function Posts() {
     return (
         <>
             <Head>
-                <title>Post | Ignews</title>                
+                <title>Post | Ignews</title>
             </Head>
 
             <main className={styles.container}>
@@ -20,7 +23,7 @@ export default function Posts() {
                         <strong>Criando um Blog com contador de visitas usando NextJS e MongoDB</strong>
                         <p>Neste post vamos aprender a criar um Blog com NextJS, usando o MongoDB para gerenciar um contador de visitas em cada post e exibir no preview da home page. Usaremos a Fetch API para buscar os dados e o SWR para nos auxiliar nas revalidações dos mesmos. No final vamos hospedar em produção usando a Vercel.</p>
                     </a>
-                    <a href="">
+                    <a href="#">
                         <time>28 de Março de 2021</time>
                         <strong>Criando um Blog com contador de visitas usando NextJS e MongoDB</strong>
                         <p>Neste post vamos aprender a criar um Blog com NextJS, usando o MongoDB para gerenciar um contador de visitas em cada post e exibir no preview da home page. Usaremos a Fetch API para buscar os dados e o SWR para nos auxiliar nas revalidações dos mesmos. No final vamos hospedar em produção usando a Vercel.</p>
@@ -29,4 +32,22 @@ export default function Posts() {
             </main>
         </>
     );
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+    const prismic = getPrimiscClient()
+
+    const response = await prismic.query(
+        [Primisc.predicates.at('document.type', 'post')],
+        {
+            fetch: ['post.title', 'post.content'],
+            pageSize : 50
+        }
+    )
+
+    console.log(response);
+
+    return {
+        props: {}
+    }
 }
