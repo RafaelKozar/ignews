@@ -3,8 +3,19 @@ import Head from 'next/head';
 import Primisc from '@prismicio/client';
 import { getPrimiscClient } from '../../services/prismic';
 import styles from './styles.module.scss';
+import { RichText } from 'prismic-dom'
 
-export default function Posts() {
+type Post = {
+    slug: string;
+    title: string;
+    excerpt: string;
+    updatedAt: string;
+}
+interface PostProps {
+    posts: Post[];
+}
+
+export default function Posts({ posts }: PostProps) {
     return (
         <>
             <Head>
@@ -13,21 +24,13 @@ export default function Posts() {
 
             <main className={styles.container}>
                 <div className={styles.posts}>
-                    <a href="#">
-                        <time>28 de Março de 2021</time>
-                        <strong>Criando um Blog com contador de visitas usando NextJS e MongoDB</strong>
-                        <p>Neste post vamos aprender a criar um Blog com NextJS, usando o MongoDB para gerenciar um contador de visitas em cada post e exibir no preview da home page. Usaremos a Fetch API para buscar os dados e o SWR para nos auxiliar nas revalidações dos mesmos. No final vamos hospedar em produção usando a Vercel.</p>
-                    </a>
-                    <a href="#">
-                        <time>28 de Março de 2021</time>
-                        <strong>Criando um Blog com contador de visitas usando NextJS e MongoDB</strong>
-                        <p>Neste post vamos aprender a criar um Blog com NextJS, usando o MongoDB para gerenciar um contador de visitas em cada post e exibir no preview da home page. Usaremos a Fetch API para buscar os dados e o SWR para nos auxiliar nas revalidações dos mesmos. No final vamos hospedar em produção usando a Vercel.</p>
-                    </a>
-                    <a href="#">
-                        <time>28 de Março de 2021</time>
-                        <strong>Criando um Blog com contador de visitas usando NextJS e MongoDB</strong>
-                        <p>Neste post vamos aprender a criar um Blog com NextJS, usando o MongoDB para gerenciar um contador de visitas em cada post e exibir no preview da home page. Usaremos a Fetch API para buscar os dados e o SWR para nos auxiliar nas revalidações dos mesmos. No final vamos hospedar em produção usando a Vercel.</p>
-                    </a>
+                    {posts.map(post => (
+                        <a href="#" key={post.slug}>
+                            <time>{post.updatedAt}</time>
+                            <strong>{post.title}</strong>
+                            <p>{post.excerpt}</p>
+                        </a>
+                    ))}                    
                 </div>
             </main>
         </>
@@ -41,13 +44,24 @@ export const getStaticProps: GetStaticProps = async () => {
         [Primisc.predicates.at('document.type', 'post')],
         {
             fetch: ['post.title', 'post.content'],
-            pageSize : 50
+            pageSize: 50
         }
     )
 
-    console.log(response);
+    const posts = response.results.map(p => {
+        return {
+            slug: p.uid,
+            title: RichText.asText(p.data.title),
+            excerpt: p.data.content.find(x => x.type === 'paragraph')?.text ?? '',
+            updatedAt: new Date(p.last_publication_date).toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            }),
+        }
+    })
 
     return {
-        props: {}
+        props: { posts }
     }
 }
