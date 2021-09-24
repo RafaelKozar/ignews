@@ -22,16 +22,16 @@ export default function Posts({ posts }: PostProps) {
                 <title>Post | Ignews</title>
             </Head>
 
-            <main className={styles.container}>
-                <div className={styles.posts}>
+            <main className={styles.container}>                
                     {posts.map(post => (
+                        <div className={styles.posts}>
                         <a href="#" key={post.slug}>
                             <time>{post.updatedAt}</time>
                             <strong>{post.title}</strong>
                             <p>{post.excerpt}</p>
                         </a>
-                    ))}                    
-                </div>
+                        </div>
+                    ))}       
             </main>
         </>
     );
