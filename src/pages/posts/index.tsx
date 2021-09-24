@@ -4,6 +4,8 @@ import Primisc from '@prismicio/client';
 import { getPrimiscClient } from '../../services/prismic';
 import styles from './styles.module.scss';
 import { RichText } from 'prismic-dom'
+import React from 'react';
+import Link from 'next/link';
 
 type Post = {
     slug: string;
@@ -22,16 +24,18 @@ export default function Posts({ posts }: PostProps) {
                 <title>Post | Ignews</title>
             </Head>
 
-            <main className={styles.container}>                
-                    {posts.map(post => (
-                        <div className={styles.posts}>
-                        <a href="#" key={post.slug}>
-                            <time>{post.updatedAt}</time>
-                            <strong>{post.title}</strong>
-                            <p>{post.excerpt}</p>
-                        </a>
-                        </div>
-                    ))}       
+            <main className={styles.container}>
+                {posts.map(post => (
+                    <div className={styles.posts}>
+                        <Link href={`/posts/${post.slug}`}>
+                            <a href="#" key={post.slug}>
+                                <time>{post.updatedAt}</time>
+                                <strong>{post.title}</strong>
+                                <p>{post.excerpt}</p>
+                            </a>
+                        </Link>
+                    </div>
+                ))}
             </main>
         </>
     );
@@ -48,6 +52,7 @@ export const getStaticProps: GetStaticProps = async () => {
         }
     )
 
+    debugger;
     const posts = response.results.map(p => {
         return {
             slug: p.uid,
