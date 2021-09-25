@@ -4,6 +4,10 @@ import Primisc from '@prismicio/client';
 import { getPrimiscClient } from '../../services/prismic';
 import styles from './styles.module.scss';
 import { RichText } from 'prismic-dom'
+<<<<<<< HEAD
+import React from 'react';
+=======
+>>>>>>> 3f5f141c8fafff9645c6fe93b2dccf77f8472ca2
 import Link from 'next/link';
 
 type Post = {
@@ -54,6 +58,7 @@ export const getStaticProps: GetStaticProps = async () => {
         }
     )
 
+    debugger;
     const posts = response.results.map(p => {
         return {
             slug: p.uid,

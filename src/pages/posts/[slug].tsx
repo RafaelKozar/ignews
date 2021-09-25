@@ -1,56 +1,60 @@
-import { GetServerSideProps } from "next"
-import { getSession } from "next-auth/client"
-import Document, { Head }  from "next/document"
-import { RichText } from "prismic-dom"
-import React from "react"
-import { getPrimiscClient } from "../../services/prismic"
+import { GetServerSideProps } from "next";
+import { getSession } from "next-auth/client";
+import { Head } from "next/document";
+import { RichText } from "prismic-dom";
+import { getPrimiscClient } from "../../services/prismic";
 
+import styles from './post.module.scss';
 
 interface PostProps {
     post: {
         slug: string;
-        title: string;
         content: string;
+        title: string;
         excerpt: string;
-        updatedAt: string;        
+        updatedAt: string;
     }
 }
 
-export default function Post({post} : PostProps){
+export default function Post({ post }: PostProps) {
     return (
         <>
             <Head>
-                <title>{post.title} | Ignews</title>                
+                <title>{post.title} | Ignews</title>
+                <main className={styles.container}>
+                    <article className={styles.post}>
+                        <h1>{post.title}</h1>
+                        <time>{post.updatedAt}</time>
+                        <div
+                            className={styles.postContent}
+                            dangerouslySetInnerHTML={{ __html: post.content }} />
+                    </article>
+                </main>
             </Head>
-
-            <main>
-                <article>
-                    <h1>{post.title}</h1>
-                    <time>{post.updatedAt}</time>
-                </article>
-            </main>
         </>
-    )
+    );
 }
 
-export const getServerSideProps : GetServerSideProps = async ({req, params}) =>{
-    const session = await getSession({req})
 
-    const {slug} = params;
-    // if(!session)
-
+export const getServerSideProps: GetServerSideProps = async ({ req, params }) => {
+    const session = await getSession({ req });
+    debugger;
+    // if(!session){}
+    const { slug } = params;
     const prismic = getPrimiscClient(req);
-    const response = await prismic.getByUID('post', String(slug), {})
+    const response = await prismic.getByUID('Post', String(slug), {});
     const post = {
-        slug, 
-        title : RichText.asText(response.data.title),
-        content : RichText.asHtml(response.data.content),
-        updatedAtAt: new Date(response.last_publication_date).toLocaleDateString('pt-BR', {
+        slug,
+        title: RichText.asText(response.data.title),
+        content: RichText.asHtml(response.data.content),
+        updatedAt: new Date(response.last_publication_date).toLocaleDateString('pt-BR', {
             day: '2-digit',
             month: 'long',
             year: 'numeric'
         }),
-    }
 
-    return {props : {post}}
+    }
+    return {
+        props: { post }
+    };
 }
