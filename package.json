@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "//": "next dev -p 3000", 
     "dev": "next dev",
     "debug-pause": "node --inspect-brk ./node_modules/next/dist/bin/next",
     "debug": "node --inspect ./node_modules/next/dist/bin/next",

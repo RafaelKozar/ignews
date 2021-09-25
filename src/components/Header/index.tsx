@@ -3,8 +3,7 @@ import { SignInButton } from '../SignInButton';
 import styles from './styles.module.scss';
 import { ActiveLink } from '../ActiveLink/indext';
 
-export function Header() {
-    
+export function Header() {  
 
     return (
         <header className={styles.headerContainer}>
