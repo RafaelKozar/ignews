@@ -1,0 +1,13 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#025",
+        "titleBar.activeBackground": "#025"             
+    },
+
+    "git.fetchOnPull": true,
+    "files.exclude": {
+        "**/bin": true,
+        "**/obj": true,
+        "**/node_modules" : true
+    }
+}
