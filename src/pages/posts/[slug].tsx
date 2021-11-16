@@ -1,7 +1,9 @@
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
-import { Head } from "next/document";
+import Head from "next/head";
+
 import { RichText } from "prismic-dom";
+import React from "react";
 import { getPrimiscClient } from "../../services/prismic";
 
 import styles from './post.module.scss';
@@ -16,7 +18,9 @@ interface PostProps {
     }
 }
 
-export default function Post({ post }: PostProps) {
+export default function Post( {post} : PostProps) {
+    debugger;
+    // console.log(post)
     return (
         <>
             <Head>
@@ -38,11 +42,12 @@ export default function Post({ post }: PostProps) {
 
 export const getServerSideProps: GetServerSideProps = async ({ req, params }) => {
     const session = await getSession({ req });
-    debugger;
+     debugger;
     // if(!session){}
+    console.log(params)
     const { slug } = params;
     const prismic = getPrimiscClient(req);
-    const response = await prismic.getByUID('Post', String(slug), {});
+    const response = await prismic.getByUID('publication', String(slug), {});
     const post = {
         slug,
         title: RichText.asText(response.data.title),
@@ -54,6 +59,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params }) =>
         }),
 
     }
+    debugger
+    console.log(post)
     return {
         props: { post }
     };
